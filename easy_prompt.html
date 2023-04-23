@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Photo Gallery</title>
+	<style>
+        .photo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .photo-container > div {
+            margin: 10px;
+            flex-basis: calc(33.33% - 20px);
+            max-width: calc(33.33% - 20px);
+        }
+    
+        .photo {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+    
+        .text-box-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+    
+        .text-box {
+            flex: 1;
+            margin-right: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+    
+        .copy-button {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+        .copy-button:hover {
+            background-color: #3e8e41;
+        }
+    
+        @media (max-width: 800px) {
+            .photo-container > div {
+                flex-basis: calc(50% - 20px);
+                max-width: calc(50% - 20px);
+            }
+        }
+    
+        @media (max-width: 500px) {
+            .photo-container > div {
+                flex-basis: calc(100% - 20px);
+                max-width: calc(100% - 20px);
+            }
+        }
+    </style>
+    
+    
+</head>
+<body>
+	<div class="photo-container">
+		<div>
+			<img src="https://picsum.photos/500" alt="Photo" class="photo" data-description="This is a photo of a beautiful {text}.">
+			<div class="text-box-container">
+				<input type="text" class="text-box" placeholder="Enter text to replace placeholder">
+				<button class="copy-button">Copy Description</button>
+			</div>
+		</div>
+		<div>
+			<img src="https://picsum.photos/500" alt="Photo" class="photo" data-description="This is a photo of a cute {text}.">
+			<div class="text-box-container">
+				<input type="text" class="text-box" placeholder="Enter text to replace placeholder">
+				<button class="copy-button">Copy Description</button>
+			</div>
+		</div>
+		<div>
+			<img src="https://picsum.photos/500" alt="Photo" class="photo" data-description="This is a photo of a delicious {text}.">
+			<div class="text-box-container">
+				<input type="text" class="text-box" placeholder="Enter text to replace placeholder">
+				<button class="copy-button">Copy Description</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+        var copyButtons = document.querySelectorAll('.copy-button');
+        var originalButtonText = [];
+    
+        for (var i = 0; i < copyButtons.length; i++) {
+            originalButtonText.push(copyButtons[i].innerText);
+    
+            copyButtons[i].addEventListener('click', function() {
+                // Get the photo element and its original description
+                var photo = this.parentElement.previousElementSibling;
+                var originalDescription = photo.getAttribute('data-description');
+    
+                // Get the text from the text box
+                var text = this.parentElement.querySelector('.text-box').value.trim();
+    
+                // Replace the placeholder in the original description with the text, if the text is not empty
+                var modifiedDescription = originalDescription.replace('{text}', text);
+    
+                // Create a temporary input element
+                var input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('value', modifiedDescription);
+                document.body.appendChild(input);
+    
+                // Select the contents of the input element
+                input.select();
+    
+                // Copy the contents to the clipboard
+                document.execCommand('copy');
+    
+                // Remove the input element
+                document.body.removeChild(input);
+    
+                // Change the button text to "Copied"
+                this.innerText = 'Copied';
+    
+                // Reset the button text after 1 second
+                var copyButton = this;
+                var originalText = originalButtonText[i];
+                setTimeout(function() {
+                    copyButton.innerText = originalText;
+                }, 1000);
+            });
+        }
+    </script>
+    
+</body>
+</html>
